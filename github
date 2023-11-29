@@ -1,0 +1,4 @@
+type = custom/script
+exec = ~/.config/polybar/modules/github/github.py
+click-left = ~/.config/polybar/modules/github/github.py notify
+interval = 5
