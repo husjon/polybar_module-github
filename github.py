@@ -1,12 +1,10 @@
 #!/usr/bin/env python
+# pylint: disable=missing-function-docstring
 
 import json
-import string
-import random
 import os
 import pathlib
 import time
-import re
 import sys
 import subprocess
 
@@ -33,7 +31,9 @@ def fetch_postal_data():
 
     data = None
     if os.path.exists(cache_file):
-        if time.time() - os.path.getmtime(cache_file) < 3600:
+        interval = CONFIG.get("interval", 15) * 60
+        interval = interval if interval > 300 else 300
+        if time.time() - os.path.getmtime(cache_file) < interval:
             with open(cache_file, "r", encoding="utf-8") as fh:
                 data = json.load(fh)
 
@@ -42,7 +42,7 @@ def fetch_postal_data():
             url=f"{API_URL}",
             headers={
                 "Accept": "application/vnd.github+json",
-                "Authorization": "Bearer {token}".format(**CONFIG),
+                "Authorization": f"Bearer {CONFIG['token']}",
             },
             timeout=5,
         )
